@@ -7,6 +7,12 @@ if ($mysqli->connect_errno) {
     echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 }
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Multable</title>
+</head>
+<body>
 <form action="addvideo.php" method="post">
 		<p>name: <input type="text" name="username" /></p>
 		<p>category: <input type="text" name="category" /></p>
@@ -16,16 +22,18 @@ if ($mysqli->connect_errno) {
 </form>
 
 <?php
-if (!isset($_SESSION["sort"]||$_SESSION["sort"]=="All"))
+if (!isset($_SESSION["sort"])||($_SESSION["sort"]=="All"))
 {
 	if (!$stmt = $mysqli->query("SELECT name, category, length,  FROM VSTORE")) {
 		echo "Query Failed!: (" . $mysqli->errno . ") ". $mysqli->error;
 	}
+}
 else
 {
 	if (!$stmt = $mysqli->query("SELECT name, category, length FROM VSTORE WHERE ?")) {
 		echo "Query Failed!: (" . $mysqli->errno . ") ". $mysqli->error;
 		//bind parameter from $_SESSION["sort"]
+	}
 }
 
 if (!$stmt->execute()) {
@@ -46,19 +54,19 @@ echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 </thead>
 <tbody>
 <?php
-$cats=array()
+$cats=array();
 while($row = mysqli_fetch_array($stmt))	
 {
 	echo "<tr>" ;
 	echo "<td>" . $row['name'] . "</td>";
 	echo "<td>" . $row['category'] . "</td>";
 	echo "<td>" . $row['length'] . "</td>";
-	echo "<td>" .;
+	echo "<td>";
 	if (!$row['rented'])
 	{
 		echo "avalible </td>";
 		echo "<td><form method=\"POST\" action=\"checkout.php\">";
-		echo "<input type=\"hidden\" name=\"nameid\" value=\"".row['name']."\">";
+		echo "<input type=\"hidden\" name=\"nameid\" value=\"".$row['name']."\">";
 		echo "<input type=\"submit\" value=\"checkout\">";
 		echo "</form> </td>";
 	}
@@ -66,23 +74,25 @@ while($row = mysqli_fetch_array($stmt))
 	{
 		echo "checked out </td>";
 		echo "<td><form method=\"POST\" action=\"checkin.php\">";
-		echo "<input type=\"hidden\" name=\"nameid\" value=\"".row['name']."\">";
+		echo "<input type=\"hidden\" name=\"nameid\" value=\"".$row['name']."\">";
 		echo "<input type=\"submit\" value=\"returned\">";
 		echo "</form> </td>";
 	}
 	echo "<td><form method=\"POST\" action=\"delete.php\">";
-	echo "<input type=\"hidden\" name=\"nameid\" value=\"".row['name']."\">";
+	echo "<input type=\"hidden\" name=\"nameid\" value=\"".$row['name']."\">";
 	echo "<input type=\"submit\" value=\"delete\">";
 	echo "</form> </td>";
 	if (!(in_array($row['category'], $cats)))
 	{
-		array_push($cats,$row['category'])
+		array_push($cats,$row['category']);
 	}
+	echo "</tr>";
 }
 ?>
 </tbody>
 </table>
-	
+	</body>
+</html>	
 	
 
 	
