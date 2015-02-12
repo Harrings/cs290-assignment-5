@@ -1,4 +1,4 @@
-<?
+<?php
 include 'pass.php';
 error_reporting(E_ALL);
 ini_set('display_errors','On');
@@ -7,7 +7,7 @@ $mysqli = new mysqli("oniddb.cws.oregonstate.edu", "harrings-db", $pass, "harrin
 if ($mysqli->connect_errno) {
     echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 }
-if (!($stmt = $mysqli->prepare("UPDATE MyGuests SET rented=1 WHERE name=?"))) {
+if (!($stmt = $mysqli->prepare("UPDATE VSTORE SET rented=1 WHERE name=?"))) {
      echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
 }
 if (!$stmt->bind_param("s", $nameset)) {

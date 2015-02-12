@@ -7,7 +7,7 @@ $mysqli = new mysqli("oniddb.cws.oregonstate.edu", "harrings-db", $pass, "harrin
 if ($mysqli->connect_errno) {
     echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 }
-if (!($stmt = $mysqli->prepare("UPDATE VSTORE SET rented=0 WHERE name=?"))) {
+if (!($stmt = $mysqli->prepare("DELETE FROM VSTORE WHERE name=?"))) {
      echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
 }
 if (!$stmt->bind_param("s", $nameset)) {
