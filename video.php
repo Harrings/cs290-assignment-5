@@ -1,8 +1,9 @@
 <?php
+include 'pass.php';
 error_reporting(E_ALL);
 ini_set('display_errors','On');
 session_start();
-$mysqli = new mysqli("oniddb.cws.oregonstate.edu", "harrings-db", "minstFy7WEjCWSCr", "harrings-db");
+$mysqli = new mysqli("oniddb.cws.oregonstate.edu", "harrings-db", $pass, "harrings-db");
 if ($mysqli->connect_errno) {
     echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 }
@@ -14,9 +15,9 @@ if ($mysqli->connect_errno) {
 </head>
 <body>
 <form action="addvideo.php" method="post">
-		<p>name: <input type="text" name="username" /></p>
+		<p>name: <input type="text" name="moviename" /></p>
 		<p>category: <input type="text" name="category" /></p>
-		<p>length: <input type="number" name="length" min="1" max="5" /></p>	
+		<p>length: <input type="number" name="length" min="1" max="500" /></p>	
 		<br><br>
 		<input type="submit" value="Submit">
 </form>
@@ -30,10 +31,14 @@ if (!isset($_SESSION["sort"])||($_SESSION["sort"]=="All"))
 }
 else
 {
-	if (!$stmt = $mysqli->query("SELECT name, category, length FROM VSTORE WHERE ?")) {
-		echo "Query Failed!: (" . $mysqli->errno . ") ". $mysqli->error;
-		//bind parameter from $_SESSION["sort"]
+	if (!$stmt = $mysqli->prepare("SELECT name, category, length FROM VSTORE WHERE category= ?")) {
+		echo "Prepare Failed!: (" . $mysqli->errno . ") ". $mysqli->error;
 	}
+	$sorter=$_SESSION["sort"];
+	if (!$stmt->bind_param("s", $sorter)) {
+    echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+	}
+	
 }
 
 if (!$stmt->execute()) {
@@ -88,9 +93,29 @@ while($row = mysqli_fetch_array($stmt))
 	}
 	echo "</tr>";
 }
+$stmt->close();
 ?>
 </tbody>
 </table>
+<form action="filter.php" method="POST">
+<div align="center">
+<select name="sort">
+<option value="All">All Movies</option>
+<?php
+$x=count($cats);
+for ($i=0;$i<$x; $i++)
+{
+	echo "<option value=$cats[$i]>$cats[$i]</option>";
+}
+?>
+</select>
+</div>
+<input type="submit" value="Filter">
+</form>
+<form method="POST" action="deleteall.php">
+<input type="hidden" name="deletekey" value="xjy">
+<input type="submit" value="delete all">
+</form>
 	</body>
 </html>	
 	
