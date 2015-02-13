@@ -73,7 +73,14 @@ while($row = mysqli_fetch_array($stmt))
 	echo "<tr>" ;
 	echo "<td>" . $row['name'] . "</td>";
 	echo "<td>" . $row['category'] . "</td>";
+	if ($row['length']==0)
+	{
+		echo "<td> </td>";
+	}
+	else
+	{
 	echo "<td>" . $row['length'] . "</td>";
+	}
 	echo "<td>";
 	if (!$row['rented'])
 	{
@@ -102,7 +109,7 @@ if (!$stmt = $mysqli->query("SELECT category FROM VSTORE")) {
 	}
 while($row = mysqli_fetch_array($stmt))	
 {
-	if (!(in_array($row['category'], $cats)))
+	if ((!(in_array($row['category'], $cats)))&&($row['category']!=null))
 	{
 		array_push($cats,$row['category']);
 	}
