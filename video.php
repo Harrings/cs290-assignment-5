@@ -53,7 +53,7 @@ echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 } */
 ?>
 
-<table>
+<table border="1">
 <thead> 
 <tr>
     <th>Title</th> 
