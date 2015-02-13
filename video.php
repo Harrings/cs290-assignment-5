@@ -67,6 +67,7 @@ echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
 <tbody>
 <?php
 $cats=array();
+
 while($row = mysqli_fetch_array($stmt))	
 {
 	echo "<tr>" ;
@@ -94,12 +95,19 @@ while($row = mysqli_fetch_array($stmt))
 	echo "<input type=\"hidden\" name=\"nameid\" value=\"".$row['name']."\">";
 	echo "<input type=\"submit\" value=\"delete\">";
 	echo "</form> </td>";
+	echo "</tr>";
+}
+if (!$stmt = $mysqli->query("SELECT category FROM VSTORE")) {
+		echo "Query Failed!: (" . $mysqli->errno . ") ". $mysqli->error;
+	}
+while($row = mysqli_fetch_array($stmt))	
+{
 	if (!(in_array($row['category'], $cats)))
 	{
 		array_push($cats,$row['category']);
 	}
-	echo "</tr>";
 }
+	
 ?>
 </tbody>
 </table>
