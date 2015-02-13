@@ -1,4 +1,5 @@
 <?php
+ob_start(); //from stack overflow
 include 'pass.php';
 error_reporting(E_ALL);
 ini_set('display_errors','On');
@@ -11,7 +12,7 @@ if ($mysqli->connect_errno) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Multable</title>
+  <title>Video Store</title>
 </head>
 <body>
 <form action="addvideo.php" method="post">
@@ -25,25 +26,31 @@ if ($mysqli->connect_errno) {
 <?php
 if (!isset($_SESSION["sort"])||($_SESSION["sort"]=="All"))
 {
-	if (!$stmt = $mysqli->query("SELECT name, category, length,  FROM VSTORE")) {
+	if (!$stmt = $mysqli->query("SELECT name, category, length, rented FROM VSTORE")) {
 		echo "Query Failed!: (" . $mysqli->errno . ") ". $mysqli->error;
 	}
 }
 else
 {
-	if (!$stmt = $mysqli->prepare("SELECT name, category, length FROM VSTORE WHERE category= ?")) {
+	/*if (!$stmt = $mysqli->prepare("SELECT name, category, length FROM VSTORE WHERE category= ?")) {
 		echo "Prepare Failed!: (" . $mysqli->errno . ") ". $mysqli->error;
 	}
 	$sorter=$_SESSION["sort"];
 	if (!$stmt->bind_param("s", $sorter)) {
     echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
 	}
-	
+	*/
+	$sorter=$_SESSION["sort"];
+	if (!$stmt = $mysqli->query("SELECT name, category, length, rented FROM VSTORE WHERE category='$sorter'")) {
+		echo "Query Failed!: (" . $mysqli->errno . ") ". $mysqli->error;
+	}
+	echo "Currently showing only $sorter films";
+	$_SESSION["sort"]="All";
 }
 
-if (!$stmt->execute()) {
+/*if (!$stmt->execute()) {
 echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
-}
+} */
 ?>
 
 <table>
@@ -93,7 +100,6 @@ while($row = mysqli_fetch_array($stmt))
 	}
 	echo "</tr>";
 }
-$stmt->close();
 ?>
 </tbody>
 </table>
