@@ -1,3 +1,3 @@
 <?php
-$pass="minstFy7WEjCWSCr";
+$pass="redacted";
 ?>
