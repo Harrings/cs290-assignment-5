@@ -1,0 +1,13 @@
+It is assumed that the start date is on the same day as the end date so I will only list start time not day
+Start: 16:00:00
+End: Tue, 10 Feb 2015 20:04:13 -0800
+Tasks: Fixed syntax errors and Created table to display mysql querry
+Start: 16:15:00
+End: Wed, 11 Feb 2015 18:46:41 -0800
+Tasks: Created functionlity for buttons part 2
+
+Start: 14:00:00
+
+End: Thu, 12 Feb 2015 17:54:51 -0800
+Tasks: Finished final debugging
+:
